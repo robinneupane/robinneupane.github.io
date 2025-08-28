@@ -43,11 +43,43 @@
             color: #0077cc;
             text-decoration: underline;
         }
-        .content {
-            text-align: center;
-            font-size: 2em;
+        .projects {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+        }
+        .project-card {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+        .project-card:hover {
+            transform: translateY(-5px);
+        }
+        .project-title {
+            font-size: 1.4em;
+            margin-bottom: 10px;
             color: #0077cc;
-            margin-top: 60px;
+        }
+        .project-desc {
+            font-size: 1em;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .project-link {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #0077cc;
+            color: #fff;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        .project-link:hover {
+            background: #005fa3;
         }
         @media (max-width: 800px) {
             .container {
@@ -69,8 +101,42 @@
             </nav>
         </header>
         <main>
-            <div class="content">
-                Project
+            <h2 style="text-align:center; color:#0077cc;">My Projects</h2>
+            <div class="projects">
+                <!-- Project 1 (real example project) -->
+                <div class="project-card">
+                    <h3 class="project-title">Personal Portfolio Website</h3>
+                    <p class="project-desc">A modern, responsive personal website built with HTML, CSS, and JavaScript to showcase my CV, projects, and contact information.</p>
+                    <a href="index.html" class="project-link">View Project</a>
+                </div>
+                
+                <!-- Project 2 (placeholder) -->
+                <div class="project-card">
+                    <h3 class="project-title">Project 2 (Coming Soon)</h3>
+                    <p class="project-desc">Details about this project will be added soon.</p>
+                    <a href="#" class="project-link">Coming Soon</a>
+                </div>
+
+                <!-- Project 3 (placeholder) -->
+                <div class="project-card">
+                    <h3 class="project-title">Project 3 (Coming Soon)</h3>
+                    <p class="project-desc">Details about this project will be added soon.</p>
+                    <a href="#" class="project-link">Coming Soon</a>
+                </div>
+
+                <!-- Project 4 (placeholder) -->
+                <div class="project-card">
+                    <h3 class="project-title">Project 4 (Coming Soon)</h3>
+                    <p class="project-desc">Details about this project will be added soon.</p>
+                    <a href="#" class="project-link">Coming Soon</a>
+                </div>
+
+                <!-- Project 5 (placeholder) -->
+                <div class="project-card">
+                    <h3 class="project-title">Project 5 (Coming Soon)</h3>
+                    <p class="project-desc">Details about this project will be added soon.</p>
+                    <a href="#" class="project-link">Coming Soon</a>
+                </div>
             </div>
         </main>
     </div>
