@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CFD Project 1: Steady Heat Conduction Problem - Robin Neupane</title>
+    <meta name="description" content="CFD Project 1: Steady Heat Conduction Problem using Central Difference Scheme">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)']],
+                displayMath: [['\\[', '\\]']]
+            }
+        };
+    </script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #fff;
+            color: #111;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.07);
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        nav {
+            background-color: #f4f4f4;
+            padding: 12px 0;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+        nav a {
+            color: #222;
+            text-decoration: none;
+            margin: 0 18px;
+            font-weight: 600;
+            font-size: 1.1em;
+            transition: color 0.2s;
+        }
+        nav a:hover {
+            color: #0077cc;
+            text-decoration: underline;
+        }
+        .project-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #0077cc;
+            margin-bottom: 20px;
+            font-size: 2.2em;
+        }
+        h2 {
+            color: #0077cc;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #0077cc;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #333;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+        }
+        .equation-block {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border-left: 4px solid #0077cc;
+        }
+        .boundary-conditions {
+            background: #f0f8ff;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            border: 1px solid #0077cc;
+        }
+        .domain-diagram {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+        ol, ul {
+            margin: 15px 0;
+            padding-left: 25px;
+        }
+        li {
+            margin: 8px 0;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #0077cc;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        @media (max-width: 800px) {
+            .container {
+                margin: 0;
+                border-radius: 0;
+                padding: 15px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            h2 {
+                font-size: 1.3em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Robin Neupane</h1>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="cv.html">CV</a>
+                <a href="projects.html">Projects</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+        </header>
+        <main class="project-content">
+            <a href="projects.html" class="back-link">← Back to Projects</a>
+            
+            <h1>CFD Project 1: Steady Heat Conduction Problem</h1>
+            
+            <h2>Introduction</h2>
+            <p>The <strong>2D steady-state heat conduction equation</strong> is a fundamental partial differential equation in heat transfer that describes the temperature distribution in a two-dimensional domain when thermal equilibrium has been reached. This elliptic PDE is expressed as:</p>
+            
+            <div class="equation-block">
+                \\[ \\frac{\\partial^2 T}{\\partial x^2} + \\frac{\\partial^2 T}{\\partial y^2} = 0 \\]
+            </div>
+            
+            <p>where \\(T(x,y)\\) represents the temperature distribution in the domain.</p>
+            
+            <p>The <strong>central difference scheme</strong> is a second-order accurate finite difference method used to discretize partial differential equations. For second-order derivatives, the central difference approximation provides excellent balance between accuracy and computational efficiency. The scheme approximates the second derivative using three neighboring grid points, making it particularly suitable for elliptic PDEs like the heat conduction equation.</p>
+            
+            <p>In this project, we will <strong>implement the central difference scheme to solve the 2D steady-state heat conduction equation</strong> on a unit square domain with specified boundary conditions. We will examine the numerical solution using different grid spacings and compare the results with the analytical solution.</p>
+
+            <h2>Problem Setup</h2>
+            
+            <div class="boundary-conditions">
+                <h3>Domain and Boundary Conditions</h3>
+                <div class="domain-diagram">
+                    <p><strong>Unit Square Domain: [0,1] × [0,1]</strong></p>
+                    <p>
+                        Top: \\(T = \\sin(\\pi x)\\) at \\(y = 1\\)<br>
+                        Left: \\(T = 0\\) at \\(x = 0\\)<br>
+                        Right: \\(T = 0\\) at \\(x = 1\\)<br>
+                        Bottom: \\(\\frac{\\partial T}{\\partial y} = 0\\) at \\(y = 0\\)
+                    </p>
+                </div>
+                
+                <p><strong>Governing PDE:</strong></p>
+                <div class="equation-block">
+                    \\[ \\frac{\\partial^2 T}{\\partial x^2} + \\frac{\\partial^2 T}{\\partial y^2} = 0 \\]
+                </div>
+                
+                <p><strong>Analytical Solution:</strong></p>
+                <div class="equation-block">
+                    \\[ u(x,y) = \\frac{\\sin(\\pi x) \\cosh(\\pi y)}{\\cosh(\\pi)} \\]
+                </div>
+            </div>
+
+            <p><strong>Grid Configurations to be analyzed:</strong></p>
+            <ol>
+                <li>\\(\\Delta x = \\Delta y = 0.1\\)</li>
+                <li>\\(\\Delta x = \\Delta y = 0.05\\)</li>
+                <li>\\(\\Delta x = 0.1, \\Delta y = 0.05\\)</li>
+            </ol>
+
+            <h2>Methodology</h2>
+            
+            <p><strong>Nature of PDE:</strong> 2nd order, linear, elliptic PDE</p>
+            
+            <h3>Finite Difference Discretization</h3>
+            <p>Using the central difference scheme for second-order partial derivatives, the PDE can be discretized to the following finite difference equation:</p>
+            
+            <div class="equation-block">
+                \\[ \\frac{T_{i+1,j} - 2T_{i,j} + T_{i-1,j}}{\\Delta x^2} + \\frac{T_{i,j+1} - 2T_{i,j} + T_{i,j-1}}{\\Delta y^2} = 0 \\]
+            </div>
+            
+            <p>Rearranging the terms:</p>
+            <div class="equation-block">
+                \\[ \\frac{T_{i+1,j}}{\\Delta x^2} + \\frac{T_{i-1,j}}{\\Delta x^2} + \\frac{T_{i,j+1}}{\\Delta y^2} + \\frac{T_{i,j-1}}{\\Delta y^2} - 2T_{i,j}\\left(\\frac{1}{\\Delta x^2} + \\frac{1}{\\Delta y^2}\\right) = 0 \\]
+            </div>
+            
+            <p>Further simplification yields:</p>
+            <div class="equation-block">
+                \\[ \\left(2 + 2\\left(\\frac{\\Delta x}{\\Delta y}\\right)^2\\right)T_{i,j} = T_{i+1,j} + T_{i-1,j} + \\left(\\frac{\\Delta x}{\\Delta y}\\right)^2(T_{i,j+1} + T_{i,j-1}) \\]
+            </div>
+            
+            <p>Let \\(\\beta = \\frac{\\Delta x}{\\Delta y}\\), then:</p>
+            <div class="equation-block">
+                \\[ (2 + 2\\beta^2)T_{i,j} = T_{i+1,j} + T_{i-1,j} + \\beta^2(T_{i,j+1} + T_{i,j-1}) \\]
+            </div>
+            
+            <p>Solving for \\(T_{i,j}\\):</p>
+            <div class="equation-block">
+                \\[ T_{i,j} = \\frac{1}{2+2\\beta^2}[T_{i+1,j} + T_{i-1,j} + \\beta^2(T_{i,j+1} + T_{i,j-1})] \\]
+            </div>
+
+            <h3>Solution Approaches</h3>
+            
+            <p><strong>1. Jacobi Method:</strong></p>
+            <div class="equation-block">
+                \\[ T_{i,j}^{(n+1)} = \\frac{1}{2+2\\beta^2}[T_{i+1,j}^{(n)} + T_{i-1,j}^{(n)} + \\beta^2(T_{i,j+1}^{(n)} + T_{i,j-1}^{(n)})] \\]
+            </div>
+            
+            <p><strong>2. Gauss-Seidel Method:</strong></p>
+            <div class="equation-block">
+                \\[ T_{i,j}^{(n+1)} = \\frac{1}{2+2\\beta^2}[T_{i+1,j}^{(n)} + T_{i-1,j}^{(n+1)} + \\beta^2(T_{i,j+1}^{(n)} + T_{i,j-1}^{(n+1)})] \\]
+            </div>
+
+            <h2>Numerical Analysis</h2>
+            
+            <h3>Order of Accuracy</h3>
+            <p>For second-order derivatives using the central difference scheme, the truncation error can be evaluated as:</p>
+            
+            <p><strong>T.E. of \\(\\frac{\\partial^2 T}{\\partial x^2}\\):</strong></p>
+            <div class="equation-block">
+                \\[ = \\frac{\\Delta x^2}{12} \\frac{\\partial^4 T}{\\partial x^4} + O(\\Delta x^4) \\]
+            </div>
+            
+            <p><strong>Total Truncation Error:</strong></p>
+            <div class="equation-block">
+                \\[ \\text{Total T.E.} = \\frac{\\Delta x^2}{12} \\frac{\\partial^4 T}{\\partial x^4} + O(\\Delta x^4) + \\frac{\\Delta y^2}{12} \\frac{\\partial^4 T}{\\partial y^4} + O(\\Delta y^4) \\]
+            </div>
+            
+            <div class="equation-block">
+                \\[ = \\frac{\\Delta x^2}{12} \\frac{\\partial^4 T}{\\partial x^4} + \\frac{\\Delta y^2}{12} \\frac{\\partial^4 T}{\\partial y^4} + O(\\Delta x^4, \\Delta y^4) \\]
+            </div>
+            
+            <p>Therefore, the scheme is of order <strong>\\(O(\\Delta x^2, \\Delta y^2)\\)</strong></p>
+            
+            <h3>Consistency</h3>
+            <p>As \\(\\lim_{\\Delta x, \\Delta y \\to 0}\\) total T.E. also approaches zero. Therefore, this is a <strong>consistent scheme</strong>.</p>
+
+        </main>
+    </div>
+</body>
+</html>
