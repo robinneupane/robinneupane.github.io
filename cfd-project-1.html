@@ -40,6 +40,8 @@
         li { margin: 8px 0; }
         .back-link { display: inline-block; margin-bottom: 20px; color: #0077cc; text-decoration: none; font-weight: bold; }
         .back-link:hover { text-decoration: underline; }
+        .video-container { text-align: center; margin: 30px 0; }
+        video { max-width: 100%; height: auto; border: 1px solid #ccc; border-radius: 8px; }
         @media (max-width: 800px) { .container { margin: 0; border-radius: 0; padding: 15px; } h1 { font-size: 1.8em; } h2 { font-size: 1.3em; } }
     </style>
 </head>
@@ -57,7 +59,7 @@
         <main class="project-content">
             <a href="projects.html" class="back-link">← Back to Projects</a>
             
-            <h1>CFD Project 1: Steady State Heat Conduction Problem</h1>
+            <h1>CFD Project 1: Steady Heat Conduction Problem</h1>
             
             <h2>Introduction</h2>
             <p>The <strong>2D steady-state heat conduction equation</strong> describes the temperature distribution in a two-dimensional domain at equilibrium:</p>
@@ -79,10 +81,12 @@
                         Bottom: \(\frac{\partial T}{\partial y} = 0\) at \(y = 0\)
                     </p>
                 </div>
+                
                 <p><strong>Governing PDE:</strong></p>
                 <div class="equation-block">
                     \[ \frac{\partial^2 T}{\partial x^2} + \frac{\partial^2 T}{\partial y^2} = 0 \]
                 </div>
+                
                 <p><strong>Analytical Solution:</strong></p>
                 <div class="equation-block">
                     \[ u(x,y) = \frac{\sin(\pi x)\cosh(\pi y)}{\cosh(\pi)} \]
@@ -123,7 +127,7 @@
             </div>
             
             <h2>Numerical Analysis</h2>
-            <h3>Order of Accuracy</h3>
+            <h3>Accuracy and Consistency</h3>
             <p>Truncation error for \(\partial^2T/\partial x^2\):</p>
             <div class="equation-block">
                 \[ =\frac{\Delta x^2}{12}\frac{\partial^4T}{\partial x^4}+O(\Delta x^4) \]
@@ -132,10 +136,16 @@
             <div class="equation-block">
                 \[ \frac{\Delta x^2}{12}\frac{\partial^4T}{\partial x^4}+\frac{\Delta y^2}{12}\frac{\partial^4T}{\partial y^4}+O(\Delta x^4,\Delta y^4) \]
             </div>
-            <p>Thus, accuracy is \(O(\Delta x^2,\Delta y^2)\).</p>
+            <p>Thus, accuracy is \(O(\Delta x^2,\Delta y^2)\), and since \(\lim_{\Delta x,\Delta y\to0}\) T.E.→0, the scheme is consistent.</p>
             
-            <h3>Consistency</h3>
-            <p>Since \(\lim_{\Delta x,\Delta y\to0}\) T.E.→0, the scheme is consistent.</p>
+            <h2>Numerical Results</h2>
+            <p>Below is an animation of the numerical solution converging to steady state:</p>
+            <div class="video-container">
+                <video controls poster="poster.png">
+                    <source src="cfd-project-1.mp4" type="video/mp4">
+                    Your browser does not support HTML5 video.
+                </video>
+            </div>
         </main>
     </div>
 </body>
