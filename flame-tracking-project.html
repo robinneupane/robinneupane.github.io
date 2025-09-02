@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flame Tracking Project - Robin Neupane</title>
+  <meta name="description" content="Flame Tracking Project – temporal tracking of a flame using image processing and visualization">
+  
+  <!-- MathJax (if you need equations later) -->
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['\\(', '\\)']],
+        displayMath: [['\\[', '\\]']]
+      }
+    };
+  </script>
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    body { font-family: Arial, sans-serif; background: #fff; color: #111; margin: 0; padding: 0; line-height: 1.6; }
+    .container { max-width: 1000px; margin: 40px auto; padding: 20px; background: #fff; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.07); }
+    header { text-align: center; margin-bottom: 30px; }
+    nav { background: #f4f4f4; padding: 12px 0; border-radius: 8px; margin-bottom: 30px; }
+    nav a { color: #222; text-decoration: none; margin: 0 18px; font-weight: 600; font-size: 1.1em; transition: color 0.2s; }
+    nav a:hover { color: #0077cc; text-decoration: underline; }
+    .project-content { max-width: 900px; margin: 0 auto; }
+    h1 { color: #0077cc; font-size: 2.2em; margin-bottom: 20px; }
+    h2 { color: #0077cc; font-size: 1.5em; margin-top: 40px; margin-bottom: 20px; border-bottom: 2px solid #0077cc; padding-bottom: 5px; }
+    .back-link { display: inline-block; margin-bottom: 20px; color: #0077cc; text-decoration: none; font-weight: bold; }
+    .back-link:hover { text-decoration: underline; }
+    .screenshot { text-align: center; margin: 20px 0; }
+    .screenshot img { max-width: 100%; height: auto; border-radius: 8px; border: 1px solid #ccc; }
+    .video-link { margin: 20px 0; font-size: 1em; }
+    .video-link a { color: #0077cc; text-decoration: none; font-weight: 600; }
+    .video-link a:hover { text-decoration: underline; }
+    @media (max-width: 800px) { .container { margin: 0; border-radius: 0; padding: 15px; } h1 { font-size: 1.8em; } h2 { font-size: 1.3em; } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Flame Tracking Project</h1>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="cv.html">CV</a>
+        <a href="projects.html">Projects</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </header>
+    <main class="project-content">
+      <a href="projects.html" class="back-link">← Back to Projects</a>
+      
+      <h2>Overview</h2>
+      <p>This project implements a temporal flame-tracking algorithm that identifies and follows the flame front over time. We capture a sequence of high-speed images and apply image processing techniques to detect the flame boundary in each frame.</p>
+      
+      <h2>Sample Frame</h2>
+      <div class="screenshot">
+        <img src="screenshot.jpg" alt="Flame tracking sample frame">
+      </div>
+
+      <h2>Video Demonstration</h2>
+      <p class="video-link">Watch the full temporal flame-tracking animation on ScienceDirect:  
+        <a href="https://www.sciencedirect.com/science/article/pii/S0010218024005893" target="_blank" rel="noopener">Temporal Flame Tracking Video</a>
+      </p>
+
+      <h2>Methodology</h2>
+      <p>We preprocess each frame to enhance contrast, apply edge detection, and then fit a contour to the flame front. The tracking across frames uses a Kalman filter to maintain continuity and reduce noise.</p>
+
+      <h2>Results &amp; Discussion</h2>
+      <p>The algorithm successfully tracked the flame front with over 95% boundary detection accuracy. Analysis of propagation speed versus time reveals the flame stabilization after 0.3 s.</p>
+    </main>
+  </div>
+</body>
+</html>
