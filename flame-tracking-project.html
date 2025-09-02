@@ -53,7 +53,7 @@
       <a href="projects.html" class="back-link">← Back to Projects</a>
       
       <h2>Overview</h2>
-      <p>This project implements a temporal flame-tracking algorithm that identifies and follows the flame front over time. We capture a sequence of high-speed images and apply image processing techniques to detect the flame boundary in each frame.</p>
+      <p>This project implements a temporal flame-tracking algorithm that identifies and follows the flame base and pyrolysis front edge over time.</p>
       
       <h2>Sample Frame</h2>
       <div class="screenshot">
@@ -61,15 +61,9 @@
       </div>
 
       <h2>Video Demonstration</h2>
-      <p class="video-link">Watch the full temporal flame-tracking animation on ScienceDirect:  
+      <p class="video-link">Watch the full temporal flame-tracking animation in the supplementary section of our article: 
         <a href="https://www.sciencedirect.com/science/article/pii/S0010218024005893" target="_blank" rel="noopener">Temporal Flame Tracking Video</a>
       </p>
-
-      <h2>Methodology</h2>
-      <p>We preprocess each frame to enhance contrast, apply edge detection, and then fit a contour to the flame front. The tracking across frames uses a Kalman filter to maintain continuity and reduce noise.</p>
-
-      <h2>Results &amp; Discussion</h2>
-      <p>The algorithm successfully tracked the flame front with over 95% boundary detection accuracy. Analysis of propagation speed versus time reveals the flame stabilization after 0.3 s.</p>
     </main>
   </div>
 </body>
