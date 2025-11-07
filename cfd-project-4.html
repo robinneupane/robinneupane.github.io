@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CFD HW 07: 2D Viscous Burgers Equation - Robin Neupane</title>
+    <meta name="description" content="CFD HW 07: Numerical Solution of 2D Viscous Burgers Equation using FTCS, FTUS, and Mixed Schemes">
+
+    <!-- 1. Configure MathJax before loading it -->
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [['\\(', '\\)']],
+          displayMath: [['\\[', '\\]']]
+        }
+      };
+    </script>
+
+    <!-- 2. Load MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+
+    <style>
+        body { font-family: Arial, sans-serif; background: #fff; color: #111; margin: 0; padding: 0; line-height: 1.6; }
+        .container { max-width: 1000px; margin: 40px auto; padding: 20px; background: #fff; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.07); }
+        header { text-align: center; margin-bottom: 30px; }
+        nav { background-color: #f4f4f4; padding: 12px 0; border-radius: 8px; margin-bottom: 30px; }
+        nav a { color: #222; text-decoration: none; margin: 0 18px; font-weight: 600; font-size: 1.1em; transition: color 0.2s; }
+        nav a:hover { color: #0077cc; text-decoration: underline; }
+        .project-content { max-width: 900px; margin: 0 auto; }
+        h1 { color: #0077cc; margin-bottom: 20px; font-size: 2.2em; }
+        h2 { color: #0077cc; margin-top: 40px; margin-bottom: 20px; font-size: 1.5em; border-bottom: 2px solid #0077cc; padding-bottom: 5px; }
+        h3 { color: #333; margin-top: 30px; margin-bottom: 15px; font-size: 1.2em; }
+        .equation-block { background: #f8f9fa; padding: 15px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #0077cc; }
+        .boundary-conditions { background: #f0f8ff; padding: 20px; margin: 20px 0; border-radius: 8px; border: 1px solid #0077cc; }
+        .domain-diagram { text-align: center; margin: 20px 0; padding: 20px; background: #f9f9f9; border-radius: 8px; }
+        ol, ul { margin: 15px 0; padding-left: 25px; }
+        li { margin: 8px 0; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #0077cc; text-decoration: none; font-weight: bold; }
+        .back-link:hover { text-decoration: underline; }
+        .video-container { text-align: center; margin: 30px 0; }
+        video { max-width: 100%; height: auto; border: 1px solid #ccc; border-radius: 8px; }
+        @media (max-width: 800px) { .container { margin: 0; border-radius: 0; padding: 15px; } h1 { font-size: 1.8em; } h2 { font-size: 1.3em; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Robin Neupane</h1>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="cv.html">CV</a>
+                <a href="projects.html">Projects</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+        </header>
+        <main class="project-content">
+            <a href="projects.html" class="back-link">← Back to Projects</a>
+            
+            <h1>CFD HW 07: 2D Viscous Burgers Equation</h1>
+            
+            <h2>Introduction</h2>
+            <p>The <strong>2D viscous Burgers equation</strong> is a fundamental model problem in computational fluid dynamics that combines nonlinear advection with viscous diffusion. This equation serves as a bridge between linear diffusion problems and fully nonlinear Navier-Stokes equations, making it an excellent benchmark for testing numerical schemes. The equation is given by:</p>
+            <div class="equation-block">
+                \[ \frac{\partial u}{\partial t} + u\frac{\partial u}{\partial x} + u\frac{\partial u}{\partial y} = c_1\frac{\partial^2 u}{\partial x^2} + c_2\frac{\partial^2 u}{\partial y^2} \]
+            </div>
+            <p>where \(u(x,y,t)\) is the solution field and \(c_1, c_2\) are viscosity coefficients. In this assignment, we implement three different finite difference schemes to compare their accuracy, stability, and convergence behavior.</p>
+            
+            <h2>Problem Setup</h2>
+            <div class="boundary-conditions">
+                <h3>Domain and Boundary Conditions</h3>
+                <div class="domain-diagram">
+                    <p><strong>Domain: [0,1] × [0,1], Time: [0, 10]</strong></p>
+                    <p>
+                        <strong>Coefficients:</strong> \(c_1 = 1.0\), \(c_2 = 0.5\), \(\gamma = 0.02\)<br>
+                        <strong>Initial Condition:</strong> \(u(x,y,0) = 0\)<br>
+                        <strong>Boundary Conditions:</strong><br>
+                        \(u(x,0,t) = 0\), \(u(x,1,t) = 1\)<br>
+                        \(u(0,y,t) = 0\), \(u(1,y,t) = 1\)
+                    </p>
+                </div>
+                
+                <p><strong>Governing PDE:</strong></p>
+                <div class="equation-block">
+                    \[ \frac{\partial u}{\partial t} + u\frac{\partial u}{\partial x} + u\frac{\partial u}{\partial y} = c_1\frac{\partial^2 u}{\partial x^2} + c_2\frac{\partial^2 u}{\partial y^2} \]
+                </div>
+            </div>
+            
+            <p><strong>Grid Configurations:</strong></p>
+            <ol>
+                <li>\(N_x = N_y = 30\)</li>
+                <li>\(N_x = N_y = 12\)</li>
+                <li>\(N_x = 30, N_y = 15\)</li>
+            </ol>
+            
+            <h2>Methodology</h2>
+            <p><strong>Nature of PDE:</strong> 2nd order, nonlinear, parabolic.</p>
+            
+            <h3>Numerical Schemes</h3>
+            <p>Three different finite difference schemes were implemented and compared:</p>
+            
+            <p><strong>1. FTCS Scheme (Forward-Time Central-Space)</strong></p>
+            <p>Explicit scheme with forward difference in time and central differences in space.</p>
+            <div class="equation-block">
+                \[ \frac{u_{i,j}^{n+1}-u_{i,j}^n}{\Delta t} + u_{i,j}^n\frac{u_{i+1,j}^n-u_{i-1,j}^n}{2\Delta x} + u_{i,j}^n\frac{u_{i,j+1}^n-u_{i,j-1}^n}{2\Delta y} = c_1\frac{u_{i+1,j}^n-2u_{i,j}^n+u_{i-1,j}^n}{\Delta x^2} + c_2\frac{u_{i,j+1}^n-2u_{i,j}^n+u_{i,j-1}^n}{\Delta y^2} \]
+            </div>
+            
+            <p><strong>2. FTUS Scheme (Forward-Time Upwind Space)</strong></p>
+            <p>Explicit scheme with upwind differencing for convection terms to improve stability.</p>
+            <div class="equation-block">
+                \[ \frac{u_{i,j}^{n+1}-u_{i,j}^n}{\Delta t} + u_{i,j}^n\frac{u_{i,j}^n-u_{i-1,j}^n}{\Delta x} + u_{i,j}^n\frac{u_{i,j}^n-u_{i,j-1}^n}{\Delta y} = c_1\frac{u_{i+1,j}^n-2u_{i,j}^n+u_{i-1,j}^n}{\Delta x^2} + c_2\frac{u_{i,j+1}^n-2u_{i,j}^n+u_{i,j-1}^n}{\Delta y^2} \]
+            </div>
+            
+            <p><strong>3. Mixed Scheme (Implicit-Explicit)</strong></p>
+            <p>Semi-implicit scheme with explicit treatment of nonlinear terms and implicit treatment of diffusion, solved using TDMA (Thomas Algorithm).</p>
+            
+            <h3>Order of Accuracy</h3>
+            <p><strong>FTCS and Mixed Schemes:</strong> \(O(\Delta t, \Delta x^2, \Delta y^2)\)</p>
+            <p><strong>FTUS Scheme:</strong> \(O(\Delta t, \Delta x, \Delta y)\)</p>
+            
+            <h3>Stability Analysis</h3>
+            <p>Von-Neumann stability analysis was performed for all three schemes. The FTCS and FTUS schemes are conditionally stable, while the mixed scheme shows improved stability properties with proper selection of time step and convergence tolerance. Stability requires:</p>
+            <ul>
+                <li><strong>FTCS and FTUS:</strong> \(r_1 + r_2 \leq 0.5\)</li>
+                <li><strong>Mixed Scheme:</strong> Requires \(\Delta t \ll \text{tolerance}\) for stable convergence</li>
+            </ul>
+            
+            <h2>Numerical Results</h2>
+            <p>Below is an animation showing the velocity distribution evolution for the 2D viscous Burgers equation:</p>
+            <div class="video-container">
+                <video controls poster="poster.png">
+                    <source src="burgers-solution.mp4" type="video/mp4">
+                    Your browser does not support HTML5 video.
+                </video>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
