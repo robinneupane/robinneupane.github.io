@@ -72,7 +72,7 @@
             <div class="boundary-conditions">
                 <h3>Domain and Boundary Conditions</h3>
                 <div class="domain-diagram">
-                    <p><strong>Domain: [0,1] × [0,1], Time: [0, 10]</strong></p>
+                    <p><strong>Domain: [0,6] × [0,6]</strong></p>
                     <p>
                         <strong>Coefficients:</strong> \(c_1 = 1.0\), \(c_2 = 0.5\), \(\gamma = 0.02\)<br>
                         <strong>Initial Condition:</strong> \(u(x,y,0) = 0\)<br>
@@ -124,14 +124,13 @@
             <p>Von-Neumann stability analysis was performed for all three schemes. The FTCS and FTUS schemes are conditionally stable, while the mixed scheme shows improved stability properties with proper selection of time step and convergence tolerance. Stability requires:</p>
             <ul>
                 <li><strong>FTCS and FTUS:</strong> \(r_1 + r_2 \leq 0.5\)</li>
-                <li><strong>Mixed Scheme:</strong> Requires \(\Delta t \ll \text{tolerance}\) for stable convergence</li>
             </ul>
             
             <h2>Numerical Results</h2>
             <p>Below is an animation showing the velocity distribution evolution for the 2D viscous Burgers equation:</p>
             <div class="video-container">
                 <video controls poster="poster.png">
-                    <source src="burgers-solution.mp4" type="video/mp4">
+                    <source src="cfd-project-4.mp4" type="video/mp4">
                     Your browser does not support HTML5 video.
                 </video>
             </div>
