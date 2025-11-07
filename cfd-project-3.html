@@ -118,10 +118,16 @@
             <p>The pressure Poisson equation is solved at each time step using either a <strong>point-wise Gauss-Seidel iteration</strong> or a <strong>line-based Gauss-Seidel with Successive Over-Relaxation (Line-SOR) method</strong>. The central difference approximation for spatial derivatives ensures \(O(\Delta x^2, \Delta y^2)\) accuracy, resulting in overall accuracy of \(O(\Delta x^2, \Delta y^2, \Delta t)\) for the advection-diffusion step and \(O(\Delta x^2, \Delta y^2)\) for the pressure and correction steps. The scheme is consistent since as \(\Delta x, \Delta y, \Delta t \to 0\), the truncation error approaches zero.</p>
             
             <h2>Numerical Results</h2>
-            <p>Below is an animation of the vorticity plot showing the recirculating flow pattern in the lid-driven cavity at different Reynolds numbers:</p>
+            <p>Below are animations of the vorticity plot showing the recirculating flow pattern in the lid-driven cavity at different Reynolds numbers:</p>
             <div class="video-container">
                 <video controls poster="poster.png">
-                    <source src="streamlines-evolution.mp4" type="video/mp4">
+                    <source src="cfd-project-3-re=100.mp4" type="video/mp4">
+                    Your browser does not support HTML5 video.
+                </video>
+            </div>
+            <div class="video-container">
+                <video controls poster="poster.png">
+                    <source src="cfd-project-3-re=1000.mp4" type="video/mp4">
                     Your browser does not support HTML5 video.
                 </video>
             </div>
