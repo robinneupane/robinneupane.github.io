@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CFD Project 2: Lid-Driven Cavity Flow - Robin Neupane</title>
+    <meta name="description" content="CFD Project 2: Lid-Driven Cavity Flow Simulation - Streamline Visualization using Navier-Stokes Solver">
+
+    <!-- 1. Configure MathJax before loading it -->
+    <script>
+      window.MathJax = {
+        tex: {
+          inlineMath: [['\\(', '\\)']],
+          displayMath: [['\\[', '\\]']]
+        }
+      };
+    </script>
+
+    <!-- 2. Load MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
+
+    <style>
+        body { font-family: Arial, sans-serif; background: #fff; color: #111; margin: 0; padding: 0; line-height: 1.6; }
+        .container { max-width: 1000px; margin: 40px auto; padding: 20px; background: #fff; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.07); }
+        header { text-align: center; margin-bottom: 30px; }
+        nav { background-color: #f4f4f4; padding: 12px 0; border-radius: 8px; margin-bottom: 30px; }
+        nav a { color: #222; text-decoration: none; margin: 0 18px; font-weight: 600; font-size: 1.1em; transition: color 0.2s; }
+        nav a:hover { color: #0077cc; text-decoration: underline; }
+        .project-content { max-width: 900px; margin: 0 auto; }
+        h1 { color: #0077cc; margin-bottom: 20px; font-size: 2.2em; }
+        h2 { color: #0077cc; margin-top: 40px; margin-bottom: 20px; font-size: 1.5em; border-bottom: 2px solid #0077cc; padding-bottom: 5px; }
+        h3 { color: #333; margin-top: 30px; margin-bottom: 15px; font-size: 1.2em; }
+        .equation-block { background: #f8f9fa; padding: 15px; margin: 20px 0; border-radius: 8px; border-left: 4px solid #0077cc; }
+        .pde-setup { background: #f0f8ff; padding: 20px; margin: 20px 0; border-radius: 8px; border: 1px solid #0077cc; }
+        .domain-diagram { text-align: center; margin: 20px 0; padding: 20px; background: #f9f9f9; border-radius: 8px; }
+        ol, ul { margin: 15px 0; padding-left: 25px; }
+        li { margin: 8px 0; }
+        .back-link { display: inline-block; margin-bottom: 20px; color: #0077cc; text-decoration: none; font-weight: bold; }
+        .back-link:hover { text-decoration: underline; }
+        .video-container { text-align: center; margin: 30px 0; }
+        video { max-width: 100%; height: auto; border: 1px solid #ccc; border-radius: 8px; }
+        @media (max-width: 800px) { .container { margin: 0; border-radius: 0; padding: 15px; } h1 { font-size: 1.8em; } h2 { font-size: 1.3em; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Robin Neupane</h1>
+            <nav>
+                <a href="index.html">Home</a>
+                <a href="cv.html">CV</a>
+                <a href="projects.html">Projects</a>
+                <a href="contact.html">Contact</a>
+            </nav>
+        </header>
+        <main class="project-content">
+            <a href="projects.html" class="back-link">← Back to Projects</a>
+            
+            <h1>CFD Project 2: Lid-Driven Cavity Flow</h1>
+            
+            <h2>Introduction</h2>
+            <p>The <strong>lid-driven cavity</strong> is a canonical benchmark problem in computational fluid dynamics for validating Navier-Stokes equation solvers. This problem consists of a square cavity containing fluid, with the top wall moving tangentially at unit velocity while the other three walls remain stationary. The moving lid generates a complex recirculating flow pattern with primary and secondary vortices, making it an ideal test case for numerical accuracy and efficiency across a range of Reynolds numbers.</p>
+            
+            <p>The simplicity of the geometry combined with well-defined boundary conditions makes this problem widely used in the CFD community. By simulating this flow at different Reynolds numbers (Re = 100, 200, and 400), we can observe how inertial effects progressively dominate over viscous effects, leading to increasingly complex flow patterns.</p>
+            
+            <h2>Problem Formulation</h2>
+            <div class="pde-setup">
+                <h3>Governing Equations</h3>
+                <p><strong>Continuity Equation (Mass Conservation):</strong></p>
+                <div class="equation-block">
+                    \[ \nabla \cdot \mathbf{u} = 0 \]
+                </div>
+                
+                <p><strong>Momentum Equation (Navier-Stokes):</strong></p>
+                <div class="equation-block">
+                    \[ \frac{\partial \mathbf{u}}{\partial t} + (\mathbf{u} \cdot \nabla)\mathbf{u} = -\nabla p + \frac{1}{Re}\nabla^2 \mathbf{u} \]
+                </div>
+                
+                <h3>Domain and Boundary Conditions</h3>
+                <div class="domain-diagram">
+                    <p><strong>Unit Square Domain: [0,1] × [0,1]</strong></p>
+                    <p>
+                        <strong>Top wall (y = 1):</strong> \(u = 1, v = 0\) (moving lid)<br>
+                        <strong>Bottom wall (y = 0):</strong> \(u = 0, v = 0\) (no-slip)<br>
+                        <strong>Left wall (x = 0):</strong> \(u = 0, v = 0\) (no-slip)<br>
+                        <strong>Right wall (x = 1):</strong> \(u = 0, v = 0\) (no-slip)
+                    </p>
+                </div>
+            </div>
+            
+            <h2>Solution Methodology</h2>
+            <h3>Numerical Approach: Fractional Step Method</h3>
+            <p>The Navier-Stokes equations are solved using the fractional step (projection) method, which decouples the velocity and pressure calculations. This method consists of three main steps:</p>
+            
+            <p><strong>Step 1: Advection-Diffusion Equation</strong></p>
+            <div class="equation-block">
+                \[ \frac{\mathbf{u}^* - \mathbf{u}^n}{\Delta t} = -(\mathbf{u}^n \cdot \nabla)\mathbf{u}^n + \frac{1}{Re}\nabla^2\mathbf{u}^* \]
+            </div>
+            
+            <p><strong>Step 2: Pressure Poisson Equation</strong></p>
+            <div class="equation-block">
+                \[ \nabla^2 p^{n+1} = \frac{\nabla \cdot \mathbf{u}^*}{\Delta t} \]
+            </div>
+            
+            <p><strong>Step 3: Velocity Correction</strong></p>
+            <div class="equation-block">
+                \[ \mathbf{u}^{n+1} = \mathbf{u}^* - \Delta t \nabla p^{n+1} \]
+            </div>
+            
+            <h3>Discretization Scheme</h3>
+            <p>A mixed implicit-explicit scheme in time with second-order central differences in space is employed. The spatial discretization uses a cell-centered collocated arrangement, providing an accurate and stable numerical solution.</p>
+            
+            <h2>Numerical Results</h2>
+            <p>Below is an animation of the streamline plot showing the recirculating flow pattern in the lid-driven cavity:</p>
+            <div class="video-container">
+                <video controls poster="poster.png">
+                    <source src="streamlines-evolution.mp4" type="video/mp4">
+                    Your browser does not support HTML5 video.
+                </video>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
